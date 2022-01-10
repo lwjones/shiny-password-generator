@@ -42,7 +42,7 @@ function getNeededCharacters() {
   let numbers = confirm("Would you like to use numbers in your password?");
   let special = confirm("Would you like to use special characters in your password?");
 
-  if (!(lowercase && uppercase && numbers && special)) {
+  if (!(lowercase || uppercase || numbers || special)) {
     alert("Unable to generate password. No characters specified.");
     return getNeededCharacters();
   }
