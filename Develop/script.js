@@ -12,7 +12,7 @@ var generateBtn = document.querySelector("#generate");
 
 /**
  * Asks user for how long they want their password to be.
- * @returns Length inclusively between PASSWORD_MIN and PASSWORD_MAX.
+ * @returns {int} Length inclusively between PASSWORD_MIN and PASSWORD_MAX.
 */
 function getPasswordLength() {
   let passwordLength = 0;
@@ -30,18 +30,55 @@ function getPasswordLength() {
   return passwordLength;
 }
 
+/**
+ * Asks user which sets of characters they would like to use for their password.
+ * If none are selected, the user will be prompted again.
+ * @returns {string} String of characters.
+*/
+function getNeededCharacters() {
+  let characters = "";
+  let lowercase = confirm("Would you like to use lowercase letters in your password?");
+  let uppercase = confirm("Would you like to use uppercase letters in your password?");
+  let numbers = confirm("Would you like to use numbers in your password?");
+  let special = confirm("Would you like to use special characters in your password?");
+
+  if (!(lowercase && uppercase && numbers && special)) {
+    alert("Unable to generate password. No characters specified.");
+    return getNeededCharacters();
+  }
+
+  if (lowercase) {
+    characters += CHARACTER_POOL.lower;
+  }
+  if (uppercase) {
+    characters += CHARACTER_POOL.upper;
+  }
+  if (numbers) {
+    characters += CHARACTER_POOL.numbers;
+  }
+  if (numbers) {
+    characters += CHARACTER_POOL.special;
+  }
+
+  return characters;
+}
+
+/**
+ * Creates a password. The user specifies the length of the password and which
+ * characters to use.
+ * @returns {string} Unique password.
+ */
 function generatePassword() {
-  let password;
+  let password = "";
   let passwordLength;
   let requestedCharacters = "";
 
-  // prompt for password length. Length must be between 8-128 characters inclusive.
   passwordLength = getPasswordLength();
+  requestedCharacters = getNeededCharacters();
 
-  console.log(passwordLength);
-
-  // ask if wanting to use lowercase, uppercase, numeric, and/or special characters.
-  // If none are selected, handle exception, notify they must select at least one.
+  for (let i = 0; i < passwordLength; i++) {
+    password += requestedCharacters[Math.floor(Math.random() * requestedCharacters.length)];
+  }
 
   return password;
 }
